@@ -5,6 +5,7 @@ import { FC, useEffect } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { useRouter } from 'next/dist/client/router';
 import { getPublicEnv } from '../services/env.service';
+import 'antd/dist/antd.css';
 
 function MyApp(props: AppProps) {
   return (
@@ -27,7 +28,11 @@ const RenderComponent: FC<AppProps> = ({
     }
   }, [cookies])
 
-  return <Component {...pageProps} />
+  return (
+    <div style={{ height: '100vh' }}>
+      <Component {...pageProps} />
+    </div>
+  )
 }
 
 
