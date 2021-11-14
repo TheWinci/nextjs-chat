@@ -1,80 +1,102 @@
-import { Button, Card, Input, Typography } from 'antd';
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { getPublicEnv } from '../services/env.service';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import Title from 'antd/lib/typography/Title';
 import styled from 'styled-components'
-import Link from 'antd/lib/typography/Link';
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import Link from 'next/link'
 
-const userIcon = (<UserOutlined />)
-const passwordIcon = (<LockOutlined />)
+const errorsTexts: Record<string, any> = {
+  'required': 'This field is required',
+  'maxLength': (maxLength: number) => `Max allowed length is ${maxLength}`,
+  'minLength': (minLength: number) => `Min allowed length is ${minLength}`,
+}
+const lengths: Record<string, number> = {
+  'maxLength': 256,
+  'minLength': 3
+}
 
 const Login: NextPage = () => {
   const [_cookies, setCookie] = useCookies([getPublicEnv('userCookieName')]);
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
-  const watchFields = watch(["username", "password"]);
+  const {
+    control,
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors: formErrors }
+  } = useForm();
 
-  const handleLogMeIn = (data: any) => console.log('data', data)
+  const onSubmit = (data: any) => console.log('submit', data);
+  const onError = (errors: any) =>
+    Object
+      .keys(errors)
+      .forEach(
+        key => setError(
+          key,
+          {
+            type: errors[key].type,
+            message: errors[key].type === 'required'
+              ? errorsTexts[errors[key].type]
+              : errorsTexts[errors[key].type](lengths[errors[key].type])
+          },
+          { shouldFocus: true }
+        )
+      );
 
-  console.log(watch(["username", "password"]));
-
+  console.log(`formErrors`, formErrors)
   return (
     <FlexContainer>
       <FlexItem>
-        <Card>
+        <div>
           <FlexColumn>
-            <Title level={3}>Login</Title>
-            <form onSubmit={handleSubmit(handleLogMeIn)}>
-              <Controller
-                name="username"
-                control={control}
-                render={({ field }) =>
-                  <Input
-                    allowClear
-                    placeholder='username'
-                    size='large'
-                    disabled={isLoading}
-                    prefix={userIcon}
-                    {...field}
-                  />
+            <h3>Login</h3>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+              <input
+                {
+                ...register(
+                  "username",
+                  {
+                    required: true,
+                    maxLength: 256,
+                    minLength: 3
+                  }
+                )
                 }
+                placeholder='username'
+                disabled={isLoading}
               />
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) =>
-                  <Input.Password
-                    allowClear
-                    placeholder='password'
-                    size='large'
-                    disabled={isLoading}
-                    prefix={passwordIcon}
-                    {...field}
-                  />
+              <ErrorText>{formErrors?.username?.message || null}</ErrorText>
+              <input
+                {
+                ...register(
+                  "password",
+                  {
+                    required: true,
+                    maxLength: 256,
+                    minLength: 3
+                  }
+                )
                 }
+                placeholder='password'
+                disabled={isLoading}
               />
-              <FullWidthButton
-                type="primary"
-                size='large'
-                htmlType='submit'
-              >
+              <ErrorText>{formErrors?.password?.message || null}</ErrorText>
+              <FullWidthButton type="submit">
                 Log in
               </FullWidthButton>
             </form>
-            <Typography>
+            <p>
               Dont have an account?
-            </Typography>
+            </p>
             <Link href="/register">
               Register
             </Link>
           </FlexColumn>
-        </Card>
+        </div>
       </FlexItem>
     </FlexContainer>
   )
@@ -99,7 +121,12 @@ const FlexColumn = styled.div`
   margin: auto;
 `
 
-const FullWidthButton = styled(Button)`
-  width: 100%
+const FullWidthButton = styled.button`
+  width: 100%;
 `
 
+const ErrorText = styled.p`
+  color: red;
+  margin: 0;
+  font-size: 12px;
+`
