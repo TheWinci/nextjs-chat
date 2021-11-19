@@ -11,4 +11,5 @@ export const Input = styled.input`
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
+  background: ${({theme: { colors }, disabled}) => disabled ? colors.dark : colors.light};
 `;

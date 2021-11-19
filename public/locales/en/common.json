@@ -1,0 +1,15 @@
+{
+  "error-with-length": "A {{statusCode}} error occurred on server",
+  "error-generic": "An unexpected error occurred",
+  "change-locale": "Change locale",
+  "loading": "Loading...",
+  "title-login": "Login",
+  "log-in": "Log in",
+  "user-name": "Username",
+  "password": "Password",
+  "no-account": "Don't have an account?",
+  "register": "Register",
+  "filed-error-required": "This field is required",
+  "filed-error-max-length": "Max allowed length is {{maxLength}}",
+  "filed-error-min-length": "Min allowed length is {{minLength}}"
+}

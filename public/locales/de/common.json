@@ -1,0 +1,7 @@
+{
+  "h3-login": "A simple example",
+  "change-locale": "Change locale",
+  "link-register": "Register",
+  "error-with-length": "A {{statusCode}} error occurred on server",
+  "error-generic": "An unexpected error occurred"
+}

@@ -7,6 +7,8 @@ import { useRouter } from 'next/dist/client/router';
 import { getPublicEnv } from '../services/env.service';
 import { defaultTheme } from '../components/Shared/Theme.constants';
 import { ThemeProvider } from 'styled-components';
+// import { appWithTranslation } from 'next-i18next';
+import '../i18n/i18n';
 
 function MyApp(props: AppProps) {
   return (
@@ -37,6 +39,7 @@ const RenderComponent: FC<AppProps> = ({
     <ThemeProvider theme={theme}>
       <div
         style={{
+          minWidth: '300px',
           height: '100vh',
           background: theme.colors.black,
           color: theme.colors.light,
@@ -49,4 +52,5 @@ const RenderComponent: FC<AppProps> = ({
 }
 
 
-export default MyApp
+export default MyApp;
+// export default appWithTranslation(MyApp);
