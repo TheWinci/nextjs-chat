@@ -1,20 +1,15 @@
-import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { useCookies } from 'react-cookie'
+import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-// import { useTranslation } from 'next-i18next'
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { getPublicEnv } from '../../services/env.service'
+import { AccountContext } from '../Shared/Account.context'
 import { Button } from '../Shared/Button.styles'
 import { Input } from '../Shared/Input.styles'
 import { maxLength, minLength } from './Login.constants'
 import { FlexContainer, FlexItem, Card, FlexColumn, ErrorText } from './Login.styles'
 
 const LoginComponent = () => {
-  const router = useRouter()
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false)
   const {
@@ -22,14 +17,14 @@ const LoginComponent = () => {
     handleSubmit,
     formState: { errors: formErrors }
   } = useForm();
+  const account = useContext(AccountContext)
 
   const onSubmit = (data: { username: string, password: string }) => {
-    console.log('submit', data)
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push('/')
-    }, 1500);
+    account
+      .login(data)
+      .catch((error: any) => console.log(error))
+      .finally(() => setIsLoading(false))
   };
 
   return (
