@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
 
-const Home: NextPage = () => {
+const MyChats: NextPage = () => {
   return (
     <div>
-      HOME
+      MyChats
     </div>
   )
 }
 
-export default Home
+export default MyChats

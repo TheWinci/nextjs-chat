@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeThemeParams } from "./Theme.types";
 
 export const defaultTheme = {
   colors: {
@@ -6,7 +6,6 @@ export const defaultTheme = {
     dark: '#393E46',
     primary: '#00ADB5',
     light: '#EEEEEE',
-
     error: '#B91646'
   },
   fontSizes: {
@@ -16,3 +15,8 @@ export const defaultTheme = {
     xlarge: 22
   }
 };
+
+export const initialContext = {
+  theme: defaultTheme,
+  changeTheme: (_params: ChangeThemeParams) => { },
+}

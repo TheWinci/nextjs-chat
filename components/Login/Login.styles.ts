@@ -15,10 +15,11 @@ export const FlexColumn = styled.div`
   align-items: center;
   align-self: center;
   margin: auto;
+  color: ${({ theme: { colors } }) => colors.light};
 `
 
 export const ErrorText = styled.p`
-  color: ${({theme}) => theme.colors.error};
+  color: ${({ theme: { colors } }) => colors.error};
   margin: 0;
   font-size: 12px;
   margin-left: 12px;
