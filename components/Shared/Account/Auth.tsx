@@ -7,17 +7,27 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 
-import { getPublicEnv } from "../../../services/env.service";
 import { LoginParams, IAuthContext } from "./Auth.types";
 import { initialContext } from "./Auth.constants";
 import { FirebaseContext } from "../Firebase/FirebaseProvider";
+import { Center, Loading } from "../Loading.styles";
+import { Layout } from "../Layout/Layout";
 
 export const AuthContext = createContext<IAuthContext>(initialContext)
 
 export const AuthProvider: FC = ({ children }) => {
   const router = useRouter()
   const firebaseContext = useContext(FirebaseContext)
-  const auth = getAuth(firebaseContext.app);
+  const auth = getAuth(firebaseContext.app)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    const unsubscriber = auth
+      .onAuthStateChanged(() => setIsLoading(false))
+
+    return () => unsubscriber()
+  }, [])
 
   const navigateToHome = () => {
     router.push('/')
@@ -32,24 +42,19 @@ export const AuthProvider: FC = ({ children }) => {
   }
 
   useEffect(() => {
+    console.log(`auth.currentUser`, auth.currentUser)
     const isExcludedPath = ['/login', '/register'].includes(router.pathname)
-
-    if (auth.currentUser === null) {
-      if (!isExcludedPath) {
-        navigateToLogin()
-        return;
-      }
-      return;
+    if (auth.currentUser === null && !isExcludedPath) {
+      navigateToLogin()
     }
-
-    if (isExcludedPath) {
+    if (auth.currentUser !== null && isExcludedPath) {
       navigateToHome()
-      return;
     }
-  }, [auth.currentUser])
+  }, [auth.currentUser, isLoading])
 
   const login = async ({ username, password }: LoginParams) => {
     signInWithEmailAndPassword(auth, username, password)
+      .then(() => navigateToHome())
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -59,6 +64,7 @@ export const AuthProvider: FC = ({ children }) => {
 
   const register = async ({ username, password }: LoginParams) => {
     createUserWithEmailAndPassword(auth, username, password)
+      .then(() => navigateToHome())
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -68,6 +74,7 @@ export const AuthProvider: FC = ({ children }) => {
 
   const logout = async () => {
     signOut(auth)
+      .then(() => navigateToLogin())
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -82,7 +89,17 @@ export const AuthProvider: FC = ({ children }) => {
       logout,
       register
     }}>
-      {children}
+      {
+        isLoading
+          ? (
+            <Layout>
+              <Center>
+                <Loading size={75} />
+              </Center>
+            </Layout>
+          )
+          : children
+      }
     </AuthContext.Provider>
   );
 }

@@ -17,9 +17,9 @@ const MyApp: FC<AppProps> = ({
     <FirebaseProvider>
       <Compose
         components={[
+          Theme,
           CookiesProvider,
           AuthProvider,
-          Theme,
         ]}
       >
         <Layout>
