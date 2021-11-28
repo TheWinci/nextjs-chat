@@ -8,8 +8,11 @@
   "user-name": "Username",
   "password": "Password",
   "no-account": "Don't have an account?",
+  "have-account": "Already have an account?",
   "register": "Register",
   "filed-error-required": "This field is required",
   "filed-error-max-length": "Max allowed length is {{maxLength}}",
-  "filed-error-min-length": "Min allowed length is {{minLength}}"
+  "filed-error-min-length": "Min allowed length is {{minLength}}",
+  "log-out": "Logout",
+  "home": "Home"
 }

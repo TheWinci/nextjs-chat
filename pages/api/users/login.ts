@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { createUser, findUser, validatePassword } from "../../libs/user";
+import { findUser, generateToken, TCurrentUser, validatePassword } from "./user.service";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
@@ -7,10 +7,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'POST':
       login(req, res);
-      break;
-
-    case 'PUT':
-      register(req, res);
       break;
 
     default:
@@ -37,29 +33,11 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  res.status(200).json({ user: userExists })
-  return;
-}
-
-
-const register = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { username, password } = req.body
-
-  const userExists = await findUser({ username })
-
-  if (userExists) {
-    res.status(400).json({ error: `Username already taken` })
-    return;
+  const returnUser: TCurrentUser = {
+    username: userExists.username,
+    token: generateToken(userExists)
   }
 
-  const createdUser = await createUser({ username, password })
-
-  if (!createdUser) {
-    res.status(500).json({ error: `Failed to create user` })
-    return;
-  }
-
-  res.status(201).json({ message: `User created` })
+  res.status(200).json(returnUser)
   return;
 }
-

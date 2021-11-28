@@ -40,12 +40,12 @@ export const BottomNavBarItem = styled.div`
   padding: 10px;
   position: absolute;
   display: flex;
+  flex-direction: column;
   align-content: center;
-  align-items: center;
-  flex-direction: row;
+  align-items: flex-start;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  justify-content: flex-end;
   box-shadow: 0 -3px 5px ${({ theme: { colors } }) => colors.dark};
   width: 150px;
-  height: 75px;
+  min-height: 75px;
 `;

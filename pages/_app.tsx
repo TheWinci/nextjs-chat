@@ -7,23 +7,26 @@ import { AuthProvider } from '../components/Shared/Account/Auth';
 import { Compose } from '../components/Shared/Compose';
 import { Theme } from '../components/Shared/Theme/Theme';
 import { Layout } from '../components/Shared/Layout/Layout';
+import { FirebaseProvider } from '../components/Shared/Firebase/FirebaseProvider';
 
 const MyApp: FC<AppProps> = ({
   Component,
   pageProps,
 }) => {
   return (
-    <Compose
-      components={[
-        CookiesProvider,
-        AuthProvider,
-        Theme,
-      ]}
-    >
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Compose>
+    <FirebaseProvider>
+      <Compose
+        components={[
+          CookiesProvider,
+          AuthProvider,
+          Theme,
+        ]}
+      >
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Compose>
+    </FirebaseProvider>
   );
 }
 

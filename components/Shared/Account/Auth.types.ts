@@ -1,3 +1,5 @@
+import { User } from "firebase/auth";
+import { TCurrentUser } from "../../../pages/api/users/user.service";
 
 export type LoginParams = {
   username: string,
@@ -5,16 +7,8 @@ export type LoginParams = {
 }
 
 export interface IAuthContext {
-  account: TAccount | null,
+  user: User | null,
   login: (params: LoginParams) => Promise<void>,
   register: (params: LoginParams) => Promise<void>,
   logout: () => Promise<void>,
-}
-
-export type TAccount = {
-  id: string,
-  createdAt: number,
-  username: string,
-  hash: string,
-  salt: string,
 }

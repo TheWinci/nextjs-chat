@@ -1,11 +1,8 @@
 import { NextPage } from 'next'
+import { RegisterComponent } from '../components/Register/Register'
 
 const Register: NextPage = () => {
-  return (
-    <div>
-      REGISTER
-    </div>
-  )
+  return (<RegisterComponent />)
 }
 
 export default Register
